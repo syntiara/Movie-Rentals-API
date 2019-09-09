@@ -8,7 +8,7 @@ const { asyncMiddleWare } = require('../middleware/error');
 const router = express.Router();
 
 //How to specify routes in express
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, async (req, res, next) => {
     try {
         const { error } = validate(req.body);
         if (error) return res.status(400).send(error.details[0].message);
@@ -20,7 +20,9 @@ router.post('/', auth, async (req, res) => {
         res.send(genre);
     }
     catch (err) {
-        res.send(err);
+        //the error should be caught by the error module
+        next(err);
+        // res.send(err);
     }
 })
 

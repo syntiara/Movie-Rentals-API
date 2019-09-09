@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,10 @@
     "joi-objectid": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.4.3"
+    "mongoose": "^5.4.3",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
   }
 }
