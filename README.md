@@ -7,7 +7,7 @@ REST API that exposes various enpoint for the management of a movie rental busin
 
 - ExpressJs
 - MongoDB
-_ Token Authenticaton
+- Token Authenticaton
 
 ## How To Install And Run The Application
 
@@ -23,7 +23,7 @@ The following should be installed in your machine:
 - Clone this Repo with `$ git clone https://github.com/syntiara/Movie-Rentals-API.git`
 - Change into the directory of the project
 - Use `$ npm install` to install all the dependencies of the project.
-- Use `$ npm start` to start the application.
+- Use `$ nodemon index.js` to run the application.
 - Create an env file in the root folder and define variables from env-sample
 - Test the enpoints using `postman`
 
