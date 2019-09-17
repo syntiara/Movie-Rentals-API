@@ -1,17 +1,16 @@
-
+const {validateObjectId, requestValidator} = require('../middleware/validation');
 const { Movie, validate } = require('../models/movie')  //object destructuring
 const { Genre } = require('../models/genre')
 const auth = require('../middleware/auth');
+
 
 // Build a web server 
 const express = require('express');
 const router = express.Router();
 
 //How to specify routes in express
-router.post('/', auth, async (req, res) => {
+router.post('/', [auth, requestValidator(validate)], async (req, res) => {
     try {
-        const { error } = validate(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
         const genre = await Genre.findById(req.body.genreId);
         if (!genre) return res.status(400).send("invalid genre id");
         let movie = new Movie({
@@ -38,16 +37,14 @@ router.get('/', async (req, res) => {
     res.send(movies);
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
     const movie = await Movie.findById(req.params.id)
     if (!movie) return res.status(404).send('The movie with the given id was not found.')
 
     res.send(movie);
 })
 
-router.put('/:id', auth, async (req, res) => {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (req, res) => {
 
     const genre = await Genre.findById(req.body.genreId);
     if (!genre) return res.status(400).send('Invalid genre.');
@@ -68,7 +65,7 @@ router.put('/:id', auth, async (req, res) => {
     res.send(movie);
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateObjectId, async (req, res) => {
     const movie = await Movie.findByIdAndRemove(req.params.id)
     if (!movie) return res.status(404).send('The movie with the given id was not found.')
 

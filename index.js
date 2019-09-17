@@ -8,6 +8,8 @@ const app = express();
 require('./middleware/logger');
 require('./startup/routes')(app);
 require('./startup/db');
+require('./startup/prod')(app);  
+
 
 //application should exit if the secret is not defined
 if (!secretKey) {
@@ -17,5 +19,7 @@ if (!secretKey) {
 //installs a middleware function in the request processing pipeline. Middleware function are called in sequence
 app.use(error);
 //This is where the application is launched
-app.listen(port, () => { console.log(`Listening on port ${port}`) });
+server = app.listen(port, () => { console.log(`Listening on port ${port}`) });
 
+module.exports = server; 
+  
