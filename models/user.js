@@ -30,12 +30,11 @@ const userSchema = new mongoose.Schema({
     isAdmin: Boolean
 });
 
-//to make the user have a method called generateAuthToken
+//to make the user have an instance method called generateAuthToken
 userSchema.methods.generateAuthToken = function () {
     //I used this keyword because I am working with the user schema directly
     return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, secretKey);
 }
-
 
 //to create a class model/ table from the schema
 const User = mongoose.model('User', userSchema);

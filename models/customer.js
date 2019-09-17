@@ -9,7 +9,7 @@ const customerSchema = new mongoose.Schema({
         maxlength: 50
     },
     isGold: {
-        type: Boolean
+        type: Boolean,
         // default: false
     },
     phone: {

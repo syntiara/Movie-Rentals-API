@@ -1,46 +1,68 @@
-
-const Joi = require('joi');
-const mongoose = require('mongoose');
-const { movieSchema } = require('./movie');
-const { customerSchema } = require('./customer');
-
+const Joi = require("joi");
+const mongoose = require("mongoose");
+const { customerSchema } = require("./customer");
 
 const rentalSchema = new mongoose.Schema({
-    customer:
-    {
-        type: customerSchema,
-        required: true
-    },
-    movie:
-    {
-        type: movieSchema,
-        required: true
-    },
-    dateOut: {
-        type: Date,
+  customer: {
+    type: customerSchema,
+    required: true
+  },
+  movie: {
+    type: new mongoose.Schema({
+      title: {
+        type: String,
         required: true,
-        default: Date.now()
-    },
-    dateReturned: {
-        type: Date,
-    },
-    rentalFee: {
+        trim: true,
+        minlength: 5,
+        maxlength: 255
+      },
+      dailyRentalRate: {
         type: Number,
-        min: 0
-    }
+        required: true,
+        min: 0,
+        max: 255
+      }
+    }),
+    required: true
+  },
+  dateOut: {
+    type: Date,
+    required: true,
+    default: Date.now()
+  },
+  dateReturned: {
+    type: Date
+  },
+  rentalFee: {
+    type: Number,
+    min: 0
+  }
 });
 
-//to create a class model/ table from the schema
-const Rental = mongoose.model('Rental', rentalSchema);
+rentalSchema.statics.lookUpRental = function (customerId, movieId) {
+     return  this.findOne({
+        'customer._id': customerId, 
+        'movie._id': movieId
+      });
+}
 
+rentalSchema.methods.calcRentalFee = function() {
+    this.dateReturned = new Date();
+    
+    this.dateOut = new Date().setDate(new Date().getDate()-10);
+    this.rentalFee =  this.dateOut.getDate() * this.movie.dailyRentalRate;
+
+}
+//to create a class model/ table from the schema
+const Rental = mongoose.model("Rental", rentalSchema);
 
 function validateRental(rental) {
-    const schema = {
-        //to validate the obejct ids
-        customerId: Joi.objectId().required(),
-        movieId: Joi.objectId().required(),
-    }
-    return Joi.validate(rental, schema)
+  const schema = {
+    //to validate the obejct ids
+    customerId: Joi.objectId().required(),
+    movieId: Joi.objectId().required()
+  };
+  return Joi.validate(rental, schema);
 }
 
 exports.Rental = Rental;
