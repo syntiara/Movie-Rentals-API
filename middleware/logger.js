@@ -25,7 +25,7 @@ const logger = winston.createLogger({
         handleExceptions: true
     })],
     //log to mongo db
-    level: 'error'
+    level: 'info'
     // format: winston.format.json()
 });
 
