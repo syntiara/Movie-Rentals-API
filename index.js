@@ -1,16 +1,19 @@
-const Joi = require('joi');
+import Joi from 'joi';
 Joi.objectId = require('joi-objectid')(Joi);
-const { port, secretKey } = require("./config")
+import { port, secretKey } from './config';
 // Build a web server 
-const express = require('express');
-const { error } = require('./middleware/error');
+import express from 'express';
+import { error } from './middleware/error';
+import {log, logger} from './middleware/logger';
+import routes from './startup/routes';
+import db from './startup/db';
+import prod from './startup/prod';  
+
 const app = express();
-require('./middleware/logger');
-require('./startup/routes')(app);
-require('./startup/db');
-require('./startup/prod')(app);  
 
-
+routes(app);
+log; logger; db;
+prod(app);
 //application should exit if the secret is not defined
 if (!secretKey) {
     console.error("FATAL ERROR: Secret is not defined");
@@ -18,8 +21,9 @@ if (!secretKey) {
 }
 //installs a middleware function in the request processing pipeline. Middleware function are called in sequence
 app.use(error);
-//This is where the application is launched
-server = app.listen(port, () => { console.log(`Listening on port ${port}`) });
 
-module.exports = server; 
+//This is where the application is launched
+const server = app.listen(port, async () => { await console.log(`Listening on port ${port}`) });
+
+export default server;
   

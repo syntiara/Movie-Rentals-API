@@ -1,11 +1,37 @@
-const bcrypt = require('bcrypt');
-const _ = require('lodash');
-const Joi = require('joi');
-const {validateObjectId, requestValidator} = require('../middleware/validation')
-const { User } = require('../models/user'); //object destructuring
-const express = require('express');
-const router = express.Router();
+import bcrypt from 'bcrypt';
+import _ from'lodash';
+import Joi from 'joi';
+import { User } from '../models/user'; //object destructuring
+import express from 'express';
 
+const router = express.Router();
+/**
+         * @swagger
+         * /auth:
+         *   post:
+         *     tags:
+         *       - Authentication
+         *     description: Generate user token
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *       - name: email
+         *         format: email
+         *         in: body
+         *         required: true
+         *       - name: password
+         *         in: body
+         *         required: true
+         *     responses:
+         *       200:
+         *         description: Return user token
+         *         schema: 
+         *             type: string
+         *       400:
+         *         description: invalid email or password
+         *       500:
+         *         description: internal server error
+         */
 router.post('/', async (req, res) => {
     try {
         const { error } = validate(req.body);
@@ -27,33 +53,6 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', async (req, res) => {
-    const user = await User.findById(id).sort({ name: 1 })
-    res.send(user);
-})
-
-router.get('/:id', validateObjectId, async (req, res) => {
-    const user = await User.findById(req.params.id)
-    if (!user) return res.status(404).send('The user with the given id was not found.')
-
-    res.send(user);
-})
-
-router.put('/:id', [validateObjectId, requestValidator(validate)], async (req, res) => {
-
-    const user = await User.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true })
-    if (!user) return res.status(404).send('The user with the given id was not found.')
-
-    res.send(user);
-})
-
-router.delete('/:id', validateObjectId, async (req, res) => {
-    const user = await User.findByIdAndRemove(req.params.id)
-    if (!user) return res.status(404).send('The user with the given id was not found.')
-
-    res.send(user);
-})
-
 function validate(req) {
     const schema = {
         email: Joi.string().min(5).max(255).required().email(), //to validate email
@@ -62,4 +61,4 @@ function validate(req) {
     return Joi.validate(req, schema)
 }
 
-module.exports = router;
+export default router;

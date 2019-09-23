@@ -1,10 +1,10 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
+import Joi from 'joi';
+import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
 const { secretKey } = require("../config");
 
 //this schema defines structure of the table in mongo db
-const userSchema = new mongoose.Schema({
+export const userSchema = new mongoose.Schema({
     name:
     {
         type: String,
@@ -37,9 +37,9 @@ userSchema.methods.generateAuthToken = function () {
 }
 
 //to create a class model/ table from the schema
-const User = mongoose.model('User', userSchema);
+export const User = mongoose.model('User', userSchema);
 
-function validateUser(user) {
+export const validateUser = user => {
     const schema = {
         name: Joi.string().min(5).max(100).required(),
         email: Joi.string().min(5).max(255).required().email(), //to validate email
@@ -47,7 +47,3 @@ function validateUser(user) {
     }
     return Joi.validate(user, schema)
 }
-
-exports.User = User;
-exports.validate = validateUser;
-exports.userSchema = userSchema;

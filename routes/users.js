@@ -1,13 +1,68 @@
-const bcrypt = require('bcrypt');
-const _ = require('lodash');
-const {validateObjectId, requestValidator} = require('../middleware/validation')
-const { User, validate } = require('../models/user'); //object destructuring
-const express = require('express');
+import bcrypt from 'bcrypt';
+import  _ from 'lodash';
+import {User, validate} from '../models/user';  //object destructuring
+import {validateObjectId, requestValidator} from '../middleware/validation';
+import auth from '../middleware/auth';
+import express from 'express';
+
 const router = express.Router();
-const auth = require('../middleware/auth');
 
+  /**
+     * @swagger
+     * definition:
+     *   inputUser:
+     *     properties:
+     *       name:
+     *         type: string
+     *       email:
+     *         type: string
+     *         format: email
+     *         description: Email for the user, needs to be unique.
+     *       password:
+     *         type: string
+     *         description: password should be strong.
+     */
 
+       /**
+     * @swagger
+     * definition:
+     *   outputUser:
+     *     properties:
+     *       id:
+     *        type: string
+     *        description: user id.
+     *       name:
+     *         type: string
+     *       email:
+     *         type: string
+     *         format: email
+     */
+    
 
+/**
+         * @swagger
+         * /users:
+         *   post:
+         *     tags:
+         *       - Users
+         *     description: create new user
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *       - name: user
+         *         description: User object
+         *         in: body
+         *         required: true
+         *         schema:
+         *           $ref: '#/definitions/inputUser'
+         *     responses:
+         *       200:
+         *         description: Return created user
+         *         schema:
+         *           $ref: '#/definitions/outputUser'
+         *       400:
+         *         description: Bad request
+         */
 router.post('/', requestValidator(validate), async (req, res) => {
     try {
 
@@ -34,11 +89,24 @@ router.post('/', requestValidator(validate), async (req, res) => {
     }
 })
 
-router.get('/', async (req, res) => {
-    const user = await User.findById(id).sort({ name: 1 })
-    res.send(_.pick(user, ['_id', 'name', 'email']));
-})
+ /**
+         * @swagger
+         * /users/me:
+         *   get:
+         *     tags:
+         *       - Users
+         *     description: Get specific user by token
+         *     security:
+         *       - bearerAuth: []
+         *     produces:
+         *       - application/json
+         *     responses:
+         *       200:
+         *         description: Return user details
+         *         schema:
+         *           $ref: '#/definitions/outputUser'
 
+*/
 //the route is named '/me' beacuse I don't want to expose the id of the user
 //I can get it from jwt web token
 router.get('/me', auth, async (req, res) => {
@@ -46,19 +114,67 @@ router.get('/me', auth, async (req, res) => {
     res.send(user);
 })
 
-router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (req, res) => {
+  /**
+             * @swagger
+             * /users/{id}:
+             *   put:
+             *     tags:
+             *       - Users
+             *     description: Update specific user detail
+             *     security:
+             *       - bearerAuth: []
+             *     produces:
+             *       - application/json
+	     *     parameters:
+	     *       - name: name
+	     *         description: user's name
+	     *         in: body
+	     *         required: true
+         *         type: string
+             *      
+             *     responses:
+             *       200:
+             *         description: Return update user details 
+             *         schema:
+             *           $ref: '#/definitions/outputUser'
+             *       400:
+             *         description: Bad request
+             *       404:
+             *         description: cannot find user with the given id
+             *         schema:
+*/
+router.put('/', [auth, validateObjectId, requestValidator(validate)], async (req, res) => {
 
-    const user = await User.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true })
+    const user = await User.findByIdAndUpdate(req.user._id, { name: req.body.name }, { new: true })
     if (!user) return res.status(404).send('The user with the given id was not found.')
 
     res.send(_.pick(user, ['_id', 'name', 'email']));
 })
 
-router.delete('/:id', validateObjectId, async (req, res) => {
-    const user = await User.findByIdAndRemove(req.params.id)
+/**
+             * @swagger
+             * /users/{id}:
+             *   delete:
+             *     tags:
+             *       - Users
+             *     description: Delete specific user detail
+             *     security:
+             *       - bearerAuth: []
+             *     produces:
+             *       - application/json
+             *     responses:
+             *       200:
+             *         description: Return deleted user details
+             *         schema:
+             *           $ref: '#/definitions/outputUser'
+             *       404:
+             *         description: cannot find user with the given id
+             */
+router.delete('/', [auth, validateObjectId], async (req, res) => {
+    const user = await User.findByIdAndRemove(req.user._id)
     if (!user) return res.status(404).send('The user with the given id was not found.')
 
     res.send(_.pick(user, ['_id', 'name', 'email']));
 })
 
-module.exports = router;
+export default router;

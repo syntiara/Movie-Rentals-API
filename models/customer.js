@@ -1,7 +1,7 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
+import Joi from 'joi';
+import mongoose from 'mongoose';
 
-const customerSchema = new mongoose.Schema({
+export const customerSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -21,9 +21,10 @@ const customerSchema = new mongoose.Schema({
 });
 
 //to create a class model/ table from the schema
-const Customer = mongoose.model('Customer', customerSchema);
+export const Customer = mongoose.model('Customer', customerSchema);
 
-function validateCustomer(customer) {
+
+export const validate = customer => {
     // if (!customer.name) return 'name is required';
     // else if (customer.name.length < 5 || customer.name.length > 50) return 'name must be between 5 and 20 characters'
     // if (!customer.phone) return 'phone is required';
@@ -35,7 +36,3 @@ function validateCustomer(customer) {
     };
     return Joi.validate(customer, schema);
 }
-
-exports.Customer = Customer;
-exports.validate = validateCustomer;
-exports.customerSchema = customerSchema;

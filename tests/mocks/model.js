@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
-const movieId = new mongoose.Types.ObjectId();
-const customerId = new mongoose.Types.ObjectId();
+import mongoose from 'mongoose';
 
-const models = {
+export const movieId = new mongoose.Types.ObjectId();
+export const customerId = new mongoose.Types.ObjectId();
+
+export const models = {
     genres: [
         { name: 'Genre1'},
         { name: 'Genre2'},
@@ -34,8 +35,3 @@ const models = {
         isAdmin: true 
      }
 }; 
-
-module.exports.models = models;
-module.exports.movieId = movieId;
-module.exports.customerId = customerId; 
-
