@@ -18,8 +18,9 @@ if (!secretKey) {
 }
 //installs a middleware function in the request processing pipeline. Middleware function are called in sequence
 app.use(error);
+
 //This is where the application is launched
-server = app.listen(port, () => { console.log(`Listening on port ${port}`) });
+const server = app.listen(port, () => { console.log(`Listening on port ${port}`) });
 
 module.exports = server; 
   

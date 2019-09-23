@@ -14,6 +14,63 @@ const admin = require('../middleware/admin');
 const Fawn = require('fawn');
 Fawn.init(mongoose);
 
+/**
+     * @swagger
+     * definition:
+     *   Rental:
+     *     properties:
+     *        id:
+     *          type: string
+     *        customer:
+     *          type: object
+     *          properties:
+     *             id:
+     *               type: string
+     *             name:
+     *               type: string
+     *             phone:
+     *               type: string
+     *        movie:
+     *          type: object
+     *          properties:
+     *             id:
+     *               type: string
+     *             title:
+     *                type: string
+     *             dailyRentalRate:
+     *                 type: number
+     */
+
+/**
+         * @swagger
+         * /rentals:
+         *   post:
+         *     tags:
+         *       - Rentals
+         *     description: Create new rental
+         *     security:
+         *       - bearerAuth: []
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *       - name: customerId
+         *         in: body
+         *         required: true
+         *       - name: movieId
+         *         in: body
+         *         required: true
+         *     responses:
+         *       200:
+         *         description: Return created rental
+         *         schema:
+         *           $ref: '#/definitions/Rental'
+         *       400:
+         *         description: Bad request
+         *       403:
+         *         description: Unauthorized
+         *       500:
+         *         description: Internal server error
+         */
 //How to specify routes in express
 router.post('/', [auth, admin, requestValidator(validate)], async (req, res) => {
 
@@ -55,12 +112,51 @@ router.post('/', [auth, admin, requestValidator(validate)], async (req, res) => 
   }
 });
 
+ /**
+         * @swagger
+         * /rentals:
+         *   get:
+         *     tags:
+         *       - Rentals
+         *     description: Get all rentals
+         *     produces:
+         *       - application/json
+         *     responses:
+         *       200:
+         *         description: Get all rentals
+         *         schema:
+         *           $ref: '#/definitions/Rental'
+*/
 router.get('/', async (req, res) => {
   const rentals = await Rental.find().sort('-dateOut');
   //when the request is sent, the response is exposed using the 'send' keyword
   res.send(rentals);
 });
 
+ /**
+         * @swagger
+         * /rentals/{id}:
+         *   get:
+         *     tags:
+         *       - Rentals
+         *     description: Get specific rental details
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *        - name: id
+         *          in: path
+         *          required: true
+         *     responses:
+         *       200:
+         *         description: Return specific rental details
+         *         schema:
+         *           $ref: '#/definitions/Rental'
+         *       400:
+         *         description: Bad request
+         *       404:
+         *         description: cannot find rental with the given id
+
+*/
 router.get('/:id', validateObjectId, async (req, res) => {
   const rental = await Rental.findById(req.params.id);
   if (!rental)
@@ -69,31 +165,34 @@ router.get('/:id', validateObjectId, async (req, res) => {
   res.send(rental);
 });
 
-router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (req, res) => {
+/**
+             * @swagger
+             * /rentals/{id}:
+             *   delete:
+             *     tags:
+             *       - Rentals
+             *     description: Delete specific rental details
+             *     security:
+             *       - bearerAuth: []
+             *     produces:
+             *       - application/json
+	     *     parameters:
+	     *       - name: id
+	     *         in: path
+	     *         required: true
+	     *         type: string
+             *     responses:
+             *       200:
+            *         description: Return deleted rental details
+            *         schema:
+            *            $ref: '#/definitions/Rental'
+             *       400:
+             *         description: Bad request
+             *       404:
+             *         description: cannot find rental with the given id
+             */
 
-  const genre = await Genre.findById(req.body.genreId);
-  if (!genre) return res.status(400).send('Invalid genre.');
-
-  const movie = await Rental.findByIdAndUpdate(
-    req.params.id,
-    {
-      title: req.body.title,
-      genre: {
-        _id: genre._id,
-        name: genre.name
-      },
-      dailyRentalRate: req.body.dailyRentalRate,
-      numberInStock: req.body.numberInStock
-    },
-    { new: true }
-  );
-  if (!movie)
-    return res.status(404).send('The movie with the given id was not found.');
-
-  res.send(movie);
-});
-
-router.delete('/:id', validateObjectId, async (req, res) => {
+router.delete('/:id', [auth, validateObjectId], async (req, res) => {
   const rental = await Rental.findByIdAndRemove(req.params.id);
   if (!rental)
     return res.status(404).send('The rental with the given id was not found.');
@@ -101,8 +200,39 @@ router.delete('/:id', validateObjectId, async (req, res) => {
   res.send(rental);
 });
 
-//How to specify routes in express
-router.post('/returns', [auth, admin, requestValidator(validate)], async (req, res) => {
+/**
+         * @swagger
+         * /rentals/returns:
+         *   post:
+         *     tags:
+         *       - Rentals
+         *     description: Enter record for returned rental
+         *     security:
+         *       - bearerAuth: []
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *       - name: customerId
+         *         in: body
+         *         required: true
+         *       - name: movieId
+         *         in: body
+         *         required: true
+         *     responses:
+         *       200:
+         *         description: Return record of returned rental
+         *         schema:
+         *           $ref: '#/definitions/Rental'
+         *       400:
+         *         description: Bad request
+         *       403:
+         *         description: Unauthorized
+         *       404:
+         *         description: cannot find rental with the given id
+         *       500:
+         *         description: Internal server error
+         */
+  router.post('/returns', [auth, admin, requestValidator(validate)], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   try {

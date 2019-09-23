@@ -4,7 +4,50 @@ const express = require('express');
 const auth = require('../middleware/auth');
 const router = express.Router();
 
-router.post('/', [auth, requestValidator(validate)], async (req, res) => {
+  /**
+     * @swagger
+     * definition:
+     *   Customer:
+     *     properties:
+     *       name:
+     *         type: string
+     *       isGold:
+     *         type: boolean
+     *         description: for premium customers
+     *       phone:
+     *         type: string
+     *         description: valid phone number
+     */
+
+/**
+         * @swagger
+         * /customers:
+         *   post:
+         *     tags:
+         *       - Customers
+         *     description: create new customer
+         *     security:
+         *       - bearerAuth: []
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *       - name: customer
+         *         description: customer object
+         *         in: body
+         *         required: true
+         *         schema:
+         *           $ref: '#/definitions/Customer'
+         *     responses:
+         *       200:
+         *         description: Return created customer
+         *         schema:
+         *           $ref: '#/definitions/Customer'
+         *       400:
+         *         description: Bad request
+         *       403:
+         *         description: unauthorized
+         */
+        router.post('/', [auth, requestValidator(validate)], async (req, res) => {
     try {
         let customer = new Customer({
             name: req.body.name,
@@ -20,11 +63,47 @@ router.post('/', [auth, requestValidator(validate)], async (req, res) => {
     }
 })
 
+ /**
+         * @swagger
+         * /customers:
+         *   get:
+         *     tags:
+         *       - Customers
+         *     description: Get all customers
+         *     produces:
+         *       - application/json
+         *     responses:
+         *       200:
+         *         description: Return existing customer
+         *         schema:
+         *           $ref: '#/definitions/Customer'
+*/
 router.get('/', async (req, res) => {
     const customer = await Customer.findById(id).sort({ name: 1 })
     res.send(customer);
 })
 
+ /**
+         * @swagger
+         * /customers/{id}:
+         *   get:
+         *     tags:
+         *       - Customers
+         *     description: Get specific customer details
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *       - name: id
+         *         in: path
+         *         required: true
+         *     responses:
+         *       200:
+         *         description: Return specific customer details
+         *         schema:
+         *           $ref: '#/definitions/Customer'
+         *       404:
+         *         description: cannot find customer with the given id
+ */
 router.get('/:id', validateObjectId,  async (req, res) => {
     const customer = await Customer.findById(req.params.id)
     if (!customer) return res.status(404).send('The customer with the given id was not found.')
@@ -32,6 +111,38 @@ router.get('/:id', validateObjectId,  async (req, res) => {
     res.send(customer);
 })
 
+/**
+         * @swagger
+         * /customers/{id}:
+         *   post:
+         *     tags:
+         *       - Customers
+         *     description: Update specific customer details
+         *     security:
+         *       - bearerAuth: []
+         *     produces:
+         *       - application/json
+         *     parameters:
+         *       - name: id
+         *         in: path
+         *         required: true
+	     *       - name: name
+	     *         description: user's name
+	     *         in: body
+	     *         required: true
+         *         type: string
+         *     responses:
+         *       200:
+         *         description: Return updated customer
+         *         schema:
+         *           $ref: '#/definitions/Customer'
+         *       400:
+         *         description: Bad request
+         *       403:
+         *         description: unauthorized
+         *       404:
+         *         description: cannot find customer with the given id
+ */
 router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (req, res) => {
 
     const customer = await Customer.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true })
@@ -40,7 +151,33 @@ router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (
     res.send(customer);
 })
 
-router.delete('/:id', validateObjectId, async (req, res) => {
+/**
+             * @swagger
+             * /customers/{id}:
+             *   delete:
+             *     tags:
+             *       - Customers
+             *     description: Delete specific customer detail
+             *     security:
+             *       - bearerAuth: []
+             *     produces:
+             *       - application/json
+	     *     parameters:
+	     *       - name: id
+	     *         in: path
+	     *         required: true
+	     *         type: string
+             *     responses:
+             *      200:
+             *         description: Return deleted customer
+             *         schema:
+             *           $ref: '#/definitions/Customer'
+             *      400:
+             *         description: Bad request
+             *      404:
+             *         description: cannot find customer with the given id
+             */
+router.delete('/:id', [auth, validateObjectId], async (req, res) => {
     const customer = await Customer.findByIdAndRemove(req.params.id)
     if (!customer) return res.status(404).send('The customer with the given id was not found.')
 

@@ -10,6 +10,7 @@ describe('/api/genres', () =>{
     beforeEach( async () => {
         server = require('../../index');
         genre = await Genre.collection.insertMany(models.genres);
+
     });
 
     afterEach(async () => {

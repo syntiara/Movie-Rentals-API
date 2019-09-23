@@ -23,6 +23,7 @@ const customerSchema = new mongoose.Schema({
 //to create a class model/ table from the schema
 const Customer = mongoose.model('Customer', customerSchema);
 
+
 function validateCustomer(customer) {
     // if (!customer.name) return 'name is required';
     // else if (customer.name.length < 5 || customer.name.length > 50) return 'name must be between 5 and 20 characters'

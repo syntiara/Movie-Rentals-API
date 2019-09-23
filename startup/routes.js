@@ -1,3 +1,5 @@
+const swaggerUI = require('swagger-ui-express');
+const {swaggerSpec} = require('../routes/home')
 const express = require('express');
 const genreRoute = require('../routes/genres');
 const customerRoute = require('../routes/customers');
@@ -15,4 +17,5 @@ app.use('/api/movies', movieRoute);
 app.use('/api/rentals', rentalRoute);
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
+app.use('/api', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 }
