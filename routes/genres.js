@@ -1,11 +1,8 @@
-const {validateObjectId, requestValidator} = require('../middleware/validation')
-const { Genre, validate} = require('../models/genre');  //object destructuring
-const auth = require('../middleware/auth');
-//ES6 syntax, since am using 'export default' in the middleware
-// import auth from '../middleware/auth';
-// Build a web server 
-const express = require('express');
-const { asyncMiddleWare } = require('../middleware/error');
+import {validateObjectId, requestValidator} from '../middleware/validation';
+import {Genre, validate} from '../models/genre';  //object destructuring
+import auth from '../middleware/auth';
+import express from 'express';
+import { asyncMiddleWare } from '../middleware/error';
 const router = express.Router();
 
 /**
@@ -154,7 +151,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
          *       404:
          *         description: cannot find genre with the given id
  */
-router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (req, res) => {
+router.put('/:id', auth, validateObjectId, async (req, res) => {
 
     const genre = await Genre.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true })
     if (!genre) return res.status(404).send('The genre with the given id was not found.')
@@ -191,11 +188,11 @@ router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (
              *      404:
              *         description: cannot find genre with the given id
              */
-router.delete('/:id', [auth, validateObjectId], async (req, res) => {
+router.delete('/:id', auth, validateObjectId, async (req, res) => {
     const genre = await Genre.findByIdAndRemove(req.params.id)
     if (!genre) return res.status(404).send('The genre with the given id was not found.')
 
     res.send(genre);
 })
 
-module.exports = router;
+export default router;

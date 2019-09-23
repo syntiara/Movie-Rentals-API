@@ -1,14 +1,14 @@
 
-const { secretKey } = require('../../../config');
-const {User} = require('../../../models/user');
-const jwt = require('jsonwebtoken');
-const {models} = require('../../mocks/model');
+import { secretKey } from '../../../config';
+import { User } from '../../../models/user';
+import { verify } from 'jsonwebtoken';
+import { models } from '../../mocks/model';
 
 describe('user.generateAuthToken', () => {
   it('should return a valid JWT', () => {
     const user = new User(models.userPayload);
     const token = user.generateAuthToken();
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = verify(token, secretKey);
     expect(decoded).toMatchObject(models.userPayload);
   });
 });

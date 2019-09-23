@@ -1,7 +1,7 @@
-const winston = require('winston');
+import winston from 'winston';
 
 //To build a middleware function
-function log(req, res, next) {
+export const log = (req, res, next) => {
     console.log('logging....')
     //used to raise an event when an exception is not caught within the express app
 // process.on('uncaughtException', (ex) =>{
@@ -19,7 +19,7 @@ function log(req, res, next) {
     next();
 }
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
     transports:[new winston.transports.File({
         filename: 'logFile.log',
         handleExceptions: true
@@ -30,7 +30,3 @@ const logger = winston.createLogger({
 });
 
 // logger.remove(new winston.transports.Console());
-
-//export the function as a module
-exports.log = log;
-exports.logger = logger;

@@ -1,10 +1,11 @@
 //for sending http request while testing
-const request = require('supertest');
+import request from 'supertest';
 // const moment = require('moment');
-const {Rental} = require('../../models/rental');
-const {Movie} = require('../../models/movie');
-const {User} = require('../../models/user');
-const {models, movieId, customerId} = require('../mocks/model');
+import { Rental } from '../../models/rental';
+import { Movie } from '../../models/movie';
+import { User } from '../../models/user';
+import { models, movieId, customerId } from '../mocks/model';
+import app from '../../index';
 
 let server;
 let token;
@@ -13,7 +14,7 @@ let movie;
 describe('/api/rentals', () =>{
 
     beforeEach( async () => {
-        server = require('../../index'); 
+        server = app; 
         rental = new Rental(models.rental);
         movie = new Movie(models.movie);
         await movie.save();

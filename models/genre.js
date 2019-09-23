@@ -1,8 +1,8 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
+import Joi from 'joi';
+import mongoose from 'mongoose';
 
 //this schema defines structure of the table in mongo db
-const genreSchema = new mongoose.Schema({
+export const genreSchema = new mongoose.Schema({
     name:
     {
         type: String,
@@ -13,16 +13,11 @@ const genreSchema = new mongoose.Schema({
 });
 
 //to create a class model/ table from the schema
-const Genre = mongoose.model('Genre', genreSchema);
+export const Genre = mongoose.model('Genre', genreSchema);
 
-function validateGenre(genre) {
+export const validate = genre => {
     const schema = {
         name: Joi.string().min(5).max(50).required()
     }
     return Joi.validate(genre, schema)
 }
-
-
-exports.Genre = Genre;
-exports.validate = validateGenre;
-exports.genreSchema = genreSchema;

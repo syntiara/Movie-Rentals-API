@@ -1,14 +1,16 @@
 //for sending http request while testing
-const request = require('supertest');
-const {Genre} = require('../../models/genre');
-const {User} = require('../../models/user');
-const {models} = require('../mocks/model');
+import request from 'supertest';
+import {User} from '../../models/user';
+import {Genre} from '../../models/genre';
+import {models} from '../mocks/model';
+import app from '../../index';
+
 let server;
 let genre;
 
 describe('/api/genres', () =>{
     beforeEach( async () => {
-        server = require('../../index');
+        server = app;
         genre = await Genre.collection.insertMany(models.genres);
 
     });

@@ -1,4 +1,4 @@
-module.exports =  (req, res, next) => {
+export default  (req, res, next) => {
     if (!req.user.isAdmin) return res.status(403).send('Access denied');
 
         next();

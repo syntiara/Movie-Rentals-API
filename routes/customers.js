@@ -1,7 +1,7 @@
-const {validateObjectId, requestValidator} = require('../middleware/validation')
-const { Customer, validate } = require('../models/customer')  //object destructuring
-const express = require('express');
-const auth = require('../middleware/auth');
+import {Customer, validate} from '../models/customer';  //object destructuring
+import {validateObjectId, requestValidator} from '../middleware/validation';
+import auth from '../middleware/auth';
+import express from 'express';
 const router = express.Router();
 
   /**
@@ -184,4 +184,4 @@ router.delete('/:id', [auth, validateObjectId], async (req, res) => {
     res.send(customer);
 })
 
-module.exports = router;
+export default router;

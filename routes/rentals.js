@@ -1,17 +1,16 @@
-const {validateObjectId, requestValidator} = require('../middleware/validation')
-const { Rental, validate } = require('../models/rental'); //object destructuring
-const { Customer } = require('../models/customer');
-const { Movie } = require('../models/movie');
-const mongoose = require('mongoose');
+import { Customer } from '../models/customer';
+import { Movie } from '../models/movie';
+import mongoose from 'mongoose';
+import {Rental, validate} from '../models/rental';  //object destructuring
+import {validateObjectId, requestValidator} from '../middleware/validation';
+import auth from '../middleware/auth';
+import admin from '../middleware/admin';
+import Fawn from 'fawn';
+import express from 'express';
 
-// Build a web server
-const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const admin = require('../middleware/admin');
 
 //for 2phase commits - multiple commit to the database
-const Fawn = require('fawn');
 Fawn.init(mongoose);
 
 /**
@@ -255,4 +254,4 @@ router.delete('/:id', [auth, validateObjectId], async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

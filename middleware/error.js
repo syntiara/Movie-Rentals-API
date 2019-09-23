@@ -1,12 +1,12 @@
-const{logger} = require('../middleware/logger');
+import {logger} from '../middleware/logger';
 
-exports.error =  (err, req, res, next) => {
+export const error =  (err, req, res, next) => {
     logger.error(err.message, err) //you can also store metadata by storing the complete error object
     res.status(500).send("internal server error occured");
 };
 
 // function for wrapping try catch block
-exports.asyncMiddleWare = (handler) => {
+export const asyncMiddleWare = (handler) => {
     return async (req, res, next) => {
         try {
             await handler(req, res);

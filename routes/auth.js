@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt');
-const _ = require('lodash');
-const Joi = require('joi');
-const {validateObjectId, requestValidator} = require('../middleware/validation')
-const { User } = require('../models/user'); //object destructuring
-const express = require('express');
+import bcrypt from 'bcrypt';
+import _ from'lodash';
+import Joi from 'joi';
+import { User } from '../models/user'; //object destructuring
+import express from 'express';
+
 const router = express.Router();
 /**
          * @swagger
@@ -61,4 +61,4 @@ function validate(req) {
     return Joi.validate(req, schema)
 }
 
-module.exports = router;
+export default router;

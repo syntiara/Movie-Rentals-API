@@ -1,11 +1,8 @@
-const {validateObjectId, requestValidator} = require('../middleware/validation');
-const { Movie, validate } = require('../models/movie')  //object destructuring
-const { Genre } = require('../models/genre')
-const auth = require('../middleware/auth');
+import {Movie, validate} from '../models/movie';  //object destructuring
+import {validateObjectId, requestValidator} from '../middleware/validation';
+import auth from '../middleware/auth';
+import express from 'express';
 
-
-// Build a web server 
-const express = require('express');
 const router = express.Router();
 
 /**
@@ -243,4 +240,4 @@ router.delete('/:id', [auth, validateObjectId], async (req, res) => {
     res.send(movie);
 })
 
-module.exports = router;
+export default router;

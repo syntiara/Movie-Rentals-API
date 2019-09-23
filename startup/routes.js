@@ -1,15 +1,15 @@
-const swaggerUI = require('swagger-ui-express');
-const {swaggerSpec} = require('../routes/home')
-const express = require('express');
-const genreRoute = require('../routes/genres');
-const customerRoute = require('../routes/customers');
-const movieRoute = require('../routes/movies');
-const rentalRoute = require('../routes/rentals');
-const userRoute = require('../routes/users');
-const authRoute = require('../routes/auth');
+import swaggerUI from 'swagger-ui-express';
+import swaggerSpec from '../routes/home';
+import express from 'express';
+import genreRoute from '../routes/genres';
+import customerRoute from '../routes/customers';
+import movieRoute from '../routes/movies';
+import rentalRoute from '../routes/rentals';
+import userRoute from '../routes/users';
+import authRoute from '../routes/auth';
 
 //installs a middleware function in the request processing pipeline. Middleware function are called in sequence
-module.exports = function(app) {
+export default app => {
 app.use(express.json())
 app.use('/api/genres', genreRoute); //append "/api/genres" to any route using genreRoute
 app.use('/api/customers', customerRoute);

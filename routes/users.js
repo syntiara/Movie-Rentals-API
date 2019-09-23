@@ -1,10 +1,11 @@
-const bcrypt = require('bcrypt');
-const _ = require('lodash');
-const {validateObjectId, requestValidator} = require('../middleware/validation')
-const { User, validate } = require('../models/user'); //object destructuring
-const express = require('express');
+import bcrypt from 'bcrypt';
+import  _ from 'lodash';
+import {User, validate} from '../models/user';  //object destructuring
+import {validateObjectId, requestValidator} from '../middleware/validation';
+import auth from '../middleware/auth';
+import express from 'express';
+
 const router = express.Router();
-const auth = require('../middleware/auth');
 
   /**
      * @swagger
@@ -176,4 +177,4 @@ router.delete('/', [auth, validateObjectId], async (req, res) => {
     res.send(_.pick(user, ['_id', 'name', 'email']));
 })
 
-module.exports = router;
+export default router;

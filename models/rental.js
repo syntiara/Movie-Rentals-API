@@ -1,6 +1,6 @@
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { customerSchema } = require("./customer");
+import Joi from 'joi';
+import mongoose from 'mongoose';
+import { customerSchema } from './customer';
 
 const rentalSchema = new mongoose.Schema({
   customer: {
@@ -54,9 +54,9 @@ rentalSchema.methods.calcRentalFee = function() {
 
 }
 //to create a class model/ table from the schema
-const Rental = mongoose.model("Rental", rentalSchema);
+export const Rental = mongoose.model("Rental", rentalSchema);
 
-function validateRental(rental) {
+export const validate = rental => {
   const schema = {
     //to validate the obejct ids
     customerId: Joi.objectId().required(),
@@ -64,6 +64,3 @@ function validateRental(rental) {
   };
   return Joi.validate(rental, schema);
 }
-
-exports.Rental = Rental;
-exports.validate = validateRental;
