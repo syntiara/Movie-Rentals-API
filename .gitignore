@@ -4,3 +4,4 @@ node_modules/
 logFile.log
 *.DS_Store
 *coverage/
+package-lock.json
