@@ -15,22 +15,16 @@ const router = express.Router();
          *     produces:
          *       - application/json
          *     parameters:
-         *       - name: email
-         *         format: email
+         *       - name: credentials
          *         in: body
          *         required: true
          *         schema:
          *           type: object
          *           properties:
-         *              name: 
+         *             email: 
+         *                format: email
          *                type: string
-         *       - name: password
-         *         in: body
-         *         required: true
-         *         schema:
-         *           type: object
-         *           properties:
-         *              password: 
+         *             password: 
          *                type: string
          *     responses:
          *       200:
