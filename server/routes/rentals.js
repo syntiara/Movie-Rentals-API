@@ -52,12 +52,16 @@ Fawn.init(mongoose);
          *     produces:
          *       - application/json
          *     parameters:
-         *       - name: customerId
+         *       - name: rental
          *         in: body
          *         required: true
-         *       - name: movieId
-         *         in: body
-         *         required: true
+         *         schema:
+         *           type: object
+         *           properties:
+         *             customerId: 
+         *                type: string
+         *             movieId: 
+         *                type: string
          *     responses:
          *       200:
          *         description: Return created rental
@@ -211,12 +215,16 @@ router.delete('/:id', [auth, validateObjectId], async (req, res) => {
          *     produces:
          *       - application/json
          *     parameters:
-         *       - name: customerId
+         *       - name: rental
          *         in: body
          *         required: true
-         *       - name: movieId
-         *         in: body
-         *         required: true
+         *         schema:
+         *           type: object
+         *           properties:
+         *             customerId: 
+         *                type: string
+         *             movieId: 
+         *                type: string
          *     responses:
          *       200:
          *         description: Return record of returned rental

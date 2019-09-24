@@ -56,9 +56,6 @@ const router = express.Router();
          *     produces:
          *       - application/json
          *     parameters:
-         *       - name: id
-         *         in: path
-         *         required: true
          *       - name: movie
          *         description: movie object
          *         in: body
