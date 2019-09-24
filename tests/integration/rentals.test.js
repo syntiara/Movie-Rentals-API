@@ -1,11 +1,10 @@
 //for sending http request while testing
 import request from 'supertest';
-// const moment = require('moment');
-import { Rental } from '../../models/rental';
-import { Movie } from '../../models/movie';
-import { User } from '../../models/user';
+import { Rental } from '../../server/models/rental';
+import { Movie } from '../../server/models/movie';
+import { User } from '../../server/models/user';
 import { models, movieId, customerId } from '../mocks/model';
-import app from '../../index';
+import app from '../../server/index';
 
 let server;
 let token;

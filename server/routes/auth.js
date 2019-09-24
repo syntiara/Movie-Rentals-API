@@ -19,9 +19,19 @@ const router = express.Router();
          *         format: email
          *         in: body
          *         required: true
+         *         schema:
+         *           type: object
+         *           properties:
+         *              name: 
+         *                type: string
          *       - name: password
          *         in: body
          *         required: true
+         *         schema:
+         *           type: object
+         *           properties:
+         *              password: 
+         *                type: string
          *     responses:
          *       200:
          *         description: Return user token

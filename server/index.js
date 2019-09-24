@@ -1,6 +1,7 @@
 import Joi from 'joi';
-Joi.objectId = require('joi-objectid')(Joi);
+import objectId from 'joi-objectid';
 import { port, secretKey } from './config';
+import '@babel/polyfill';
 // Build a web server 
 import express from 'express';
 import { error } from './middleware/error';
@@ -10,10 +11,11 @@ import db from './startup/db';
 import prod from './startup/prod';  
 
 const app = express();
-
 routes(app);
+Joi.objectId = objectId(Joi);
 log; logger; db;
 prod(app);
+
 //application should exit if the secret is not defined
 if (!secretKey) {
     console.error("FATAL ERROR: Secret is not defined");

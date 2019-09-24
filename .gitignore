@@ -1,5 +1,7 @@
 node_modules/
 .env
-./logFile.log
+*build/
+logFile.log
 *.DS_Store
 *coverage/
+package-lock.json
