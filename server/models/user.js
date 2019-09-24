@@ -39,7 +39,7 @@ userSchema.methods.generateAuthToken = function () {
 //to create a class model/ table from the schema
 export const User = mongoose.model('User', userSchema);
 
-export const validateUser = user => {
+export const validate = user => {
     const schema = {
         name: Joi.string().min(5).max(100).required(),
         email: Joi.string().min(5).max(255).required().email(), //to validate email

@@ -79,7 +79,7 @@ const router = express.Router();
          *           $ref: '#/definitions/Customer'
 */
 router.get('/', async (req, res) => {
-    const customer = await Customer.findById(id).sort({ name: 1 })
+    const customer = await Customer.find().sort({ name: 1 })
     res.send(customer);
 })
 
