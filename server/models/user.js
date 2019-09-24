@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-const { secretKey } = require("../config");
+import { secretKey } from '../config';
 
 //this schema defines structure of the table in mongo db
 export const userSchema = new mongoose.Schema({

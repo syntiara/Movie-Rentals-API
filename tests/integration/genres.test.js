@@ -1,9 +1,9 @@
 //for sending http request while testing
 import request from 'supertest';
-import {User} from '../../models/user';
-import {Genre} from '../../models/genre';
+import {User} from '../../server/models/user';
+import {Genre} from '../../server/models/genre';
 import {models} from '../mocks/model';
-import app from '../../index';
+import app from '../../server/index';
 
 let server;
 let genre;

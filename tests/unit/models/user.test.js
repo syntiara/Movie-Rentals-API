@@ -1,6 +1,6 @@
 
-import { secretKey } from '../../../config';
-import { User } from '../../../models/user';
+import { secretKey } from '../../../server/config';
+import { User } from '../../../server/models/user';
 import { verify } from 'jsonwebtoken';
 import { models } from '../../mocks/model';
 

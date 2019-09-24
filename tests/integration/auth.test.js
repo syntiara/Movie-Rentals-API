@@ -1,7 +1,7 @@
 import request from 'supertest';
-import {User} from '../../models/user';
-import {Genre} from '../../models/genre';
-import app from '../../index';
+import {User} from '../../server/models/user';
+import {Genre} from '../../server/models/genre';
+import app from '../../server/index';
 let server;
 
 describe('auth middleware', () =>{

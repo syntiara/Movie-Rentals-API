@@ -5,15 +5,20 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest --coverage --forceExit --detectOpenHandles",
-    "start": "NODE_ENV=production nodemon index.js --exec babel-node",
-    "start:dev": "NODE_ENV=development nodemon index.js --exec babel-node"
+    "start": "NODE_ENV=production npm run build && node ./build/index.js",
+    "build": "babel ./server -d ./build",
+    "start:dev": "NODE_ENV=development nodemon ./server/index.js --exec babel-node"
   },
   "engines": {
     "node": "10.16.2"
   },
   "jest": {
-    "testMatch":  ["<rootDir>/tests/**"],
-    "modulePathIgnorePatterns": ["<rootDir>/tests/mocks"]
+    "testMatch": [
+      "<rootDir>/tests/**"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/tests/mocks"
+    ]
   },
   "keywords": [],
   "author": "",
