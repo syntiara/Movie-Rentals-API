@@ -1,5 +1,6 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import express from 'express';
+import {host} from '../config'
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const swaggerDefinition = {
       description: 'Endpoints to test the movie rental routes',
     },
     components: {},
-    host: 'localhost:50300',
+    host: host,
     basePath: '/api',
     securityDefinitions: {
       bearerAuth: {

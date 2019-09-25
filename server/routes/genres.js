@@ -27,17 +27,19 @@ const router = express.Router();
          *              name: 
          *                type: string
          *     responses:
-         *       200:
+         *      200:
          *         description: Return created genre
          *         schema: 
          *             type: object
          *             properties:
-         *               name: 
-         *                 type: string
-         *       400:
-         *         description: Bad request
-         *       403:
-         *         description: unauthorized
+         *              id: 
+         *                type: string
+         *              name: 
+         *                type: string
+         *      400:
+         *            description: Bad request
+         *      403:
+         *            description: unauthorized
 
  */
 
@@ -72,7 +74,9 @@ router.post('/', [auth, requestValidator(validate)], async (req, res, next) => {
          *         schema: 
          *             type: object
          *             properties:
-         *               name: 
+         *              id: 
+         *                type: string
+         *              name: 
          *                type: string
  */
 router.get('/', asyncMiddleWare(async (req, res) => {
@@ -100,7 +104,9 @@ router.get('/', asyncMiddleWare(async (req, res) => {
          *         schema: 
          *             type: object
          *             properties:
-         *               name: 
+         *              id: 
+         *                type: string
+         *              name: 
          *                type: string
          *       404:
          *         description: cannot find genre with the given id
@@ -141,9 +147,11 @@ router.get('/:id', validateObjectId, async (req, res) => {
          *         description: Return updated genre
          *         schema: 
          *             type: object
-         *         properties:
-         *           name: 
-         *             type: string
+         *             properties:
+         *              id: 
+         *                type: string
+         *              name: 
+         *                type: string
          *       400:
          *         description: Bad request
          *       403:
@@ -180,9 +188,11 @@ router.put('/:id', auth, validateObjectId, async (req, res) => {
              *         description: Return deleted genre
              *         schema: 
              *             type: object
-             *         properties:
-             *            name: 
-             *              type: string
+         *             properties:
+         *              id: 
+         *                type: string
+         *              name: 
+         *                type: string
              *      400:
              *         description: Bad request
              *      404:
