@@ -57,4 +57,4 @@ server side testing is achieved through the use of `jest` package. `jest` is a t
 
 ## Support or Contribution
 For any suggestions or contributions or issues please do raise them or email me.
-For **Contributiions**, Please clone the repo and implement a PR I would appreciate it
+For **Contributions**, Please clone the repo and implement a PR, I would appreciate it
