@@ -1,4 +1,4 @@
-import {Customer, validate} from '../models/customer';  //object destructuring
+import {Client, validate} from '../models/client';  //object destructuring
 import {validateObjectId, requestValidator} from '../middleware/validation';
 import auth from '../middleware/auth';
 import express from 'express';
@@ -7,13 +7,13 @@ const router = express.Router();
   /**
      * @swagger
      * definition:
-     *   Customer:
+     *   client:
      *     properties:
      *       name:
      *         type: string
      *       isGold:
      *         type: boolean
-     *         description: for premium customers
+     *         description: for premium clients
      *       phone:
      *         type: string
      *         description: valid phone number
@@ -21,42 +21,42 @@ const router = express.Router();
 
 /**
          * @swagger
-         * /customers:
+         * /clients:
          *   post:
          *     tags:
-         *       - Customers
-         *     description: create new customer
+         *       - clients
+         *     description: create new client
          *     security:
          *       - bearerAuth: []
          *     produces:
          *       - application/json
          *     parameters:
-         *       - name: customer
-         *         description: customer object
+         *       - name: client
+         *         description: client object
          *         in: body
          *         required: true
          *         schema:
-         *           $ref: '#/definitions/Customer'
+         *           $ref: '#/definitions/client'
          *     responses:
          *       200:
-         *         description: Return created customer
+         *         description: Return created client
          *         schema:
-         *           $ref: '#/definitions/Customer'
+         *           $ref: '#/definitions/client'
          *       400:
          *         description: Bad request
          *       403:
          *         description: unauthorized
          */
-        router.post('/', [auth, requestValidator(validate)], async (req, res) => {
+        router.post('/', [requestValidator(validate)], async (req, res) => {
     try {
-        let customer = new Customer({
+        let client = new Client({
             name: req.body.name,
             isGold: req.body.isGold,
             phone: req.body.phone
         });
         //_id is created by mongodb driver before hitting the db
-        await customer.save();
-        res.send(customer);
+        await client.save();
+        res.status(200).send(client);
     }
     catch (err) {
         res.send(err);
@@ -65,31 +65,31 @@ const router = express.Router();
 
  /**
          * @swagger
-         * /customers:
+         * /clients:
          *   get:
          *     tags:
-         *       - Customers
-         *     description: Get all customers
+         *       - clients
+         *     description: Get all clients
          *     produces:
          *       - application/json
          *     responses:
          *       200:
-         *         description: Return existing customer
+         *         description: Return existing client
          *         schema:
-         *           $ref: '#/definitions/Customer'
+         *           $ref: '#/definitions/client'
 */
 router.get('/', async (req, res) => {
-    const customer = await Customer.find().sort({ name: 1 })
-    res.send(customer);
+    const client = await Client.find().sort({ name: 1 })
+    res.send(client);
 })
 
  /**
          * @swagger
-         * /customers/{id}:
+         * /clients/{id}:
          *   get:
          *     tags:
-         *       - Customers
-         *     description: Get specific customer details
+         *       - clients
+         *     description: Get specific client details
          *     produces:
          *       - application/json
          *     parameters:
@@ -98,26 +98,26 @@ router.get('/', async (req, res) => {
          *         required: true
          *     responses:
          *       200:
-         *         description: Return specific customer details
+         *         description: Return specific client details
          *         schema:
-         *           $ref: '#/definitions/Customer'
+         *           $ref: '#/definitions/client'
          *       404:
-         *         description: cannot find customer with the given id
+         *         description: cannot find client with the given id
  */
 router.get('/:id', validateObjectId,  async (req, res) => {
-    const customer = await Customer.findById(req.params.id)
-    if (!customer) return res.status(404).send('The customer with the given id was not found.')
+    const client = await Client.findById(req.params.id)
+    if (!client) return res.status(404).send('The client with the given id was not found.')
 
-    res.send(customer);
+    res.send(client);
 })
 
 /**
          * @swagger
-         * /customers/{id}:
+         * /clients/{id}:
          *   post:
          *     tags:
-         *       - Customers
-         *     description: Update specific customer details
+         *       - clients
+         *     description: Update specific client details
          *     security:
          *       - bearerAuth: []
          *     produces:
@@ -130,34 +130,38 @@ router.get('/:id', validateObjectId,  async (req, res) => {
 	     *         description: user's name
 	     *         in: body
 	     *         required: true
-         *         type: string
+         *         schema:
+         *           type: object
+         *           properties:
+         *              name: 
+         *                type: string
          *     responses:
          *       200:
-         *         description: Return updated customer
+         *         description: Return updated client
          *         schema:
-         *           $ref: '#/definitions/Customer'
+         *           $ref: '#/definitions/client'
          *       400:
          *         description: Bad request
          *       403:
          *         description: unauthorized
          *       404:
-         *         description: cannot find customer with the given id
+         *         description: cannot find client with the given id
  */
 router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (req, res) => {
 
-    const customer = await Customer.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true })
-    if (!customer) return res.status(404).send('The customer with the given id was not found.')
+    const client = await Client.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true })
+    if (!client) return res.status(404).send('The client with the given id was not found.')
 
-    res.send(customer);
+    res.send(client);
 })
 
 /**
              * @swagger
-             * /customers/{id}:
+             * /clients/{id}:
              *   delete:
              *     tags:
-             *       - Customers
-             *     description: Delete specific customer detail
+             *       - clients
+             *     description: Delete specific client detail
              *     security:
              *       - bearerAuth: []
              *     produces:
@@ -169,19 +173,19 @@ router.put('/:id', [auth, validateObjectId, requestValidator(validate)], async (
 	     *         type: string
              *     responses:
              *      200:
-             *         description: Return deleted customer
+             *         description: Return deleted client
              *         schema:
-             *           $ref: '#/definitions/Customer'
+             *           $ref: '#/definitions/client'
              *      400:
              *         description: Bad request
              *      404:
-             *         description: cannot find customer with the given id
+             *         description: cannot find client with the given id
              */
 router.delete('/:id', [auth, validateObjectId], async (req, res) => {
-    const customer = await Customer.findByIdAndRemove(req.params.id)
-    if (!customer) return res.status(404).send('The customer with the given id was not found.')
+    const client = await Client.findByIdAndRemove(req.params.id)
+    if (!client) return res.status(404).send('The client with the given id was not found.')
 
-    res.send(customer);
+    res.send(client);
 })
 
 export default router;
