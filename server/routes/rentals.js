@@ -1,4 +1,4 @@
-import { Customer } from '../models/customer';
+import { Client } from '../models/client';
 import { Movie } from '../models/movie';
 import mongoose from 'mongoose';
 import {Rental, validate} from '../models/rental';  //object destructuring
@@ -16,11 +16,11 @@ Fawn.init(mongoose);
 /**
      * @swagger
      * definition:
-     *   Rental:
+     *   rental:
      *     properties:
      *        id:
      *          type: string
-     *        customer:
+     *        client:
      *          type: object
      *          properties:
      *             id:
@@ -58,7 +58,7 @@ Fawn.init(mongoose);
          *         schema:
          *           type: object
          *           properties:
-         *             customerId: 
+         *             clientId: 
          *                type: string
          *             movieId: 
          *                type: string
@@ -66,7 +66,7 @@ Fawn.init(mongoose);
          *       200:
          *         description: Return created rental
          *         schema:
-         *           $ref: '#/definitions/Rental'
+         *           $ref: '#/definitions/rental'
          *       400:
          *         description: Bad request
          *       403:
@@ -77,8 +77,8 @@ Fawn.init(mongoose);
 //How to specify routes in express
 router.post('/', [auth, admin, requestValidator(validate)], async (req, res) => {
 
-  const customer = await Customer.findById(req.body.customerId);
-  if (!customer) return res.status(400).send('customer not found');
+  const client = await Client.findById(req.body.clientId);
+  if (!client) return res.status(400).send('client not found');
 
   const movie = await Movie.findById(req.body.movieId);
   if (!movie) return res.status(400).send('movie not found');
@@ -86,10 +86,10 @@ router.post('/', [auth, admin, requestValidator(validate)], async (req, res) => 
   if (movie.numberInStock === 0)
     return res.status(400).send('movie not in stock');
   let rental = new Rental({
-    customer: {
-      _id: customer._id,
-      name: customer.name,
-      phone: customer.phone
+    client: {
+      _id: client._id,
+      name: client.name,
+      phone: client.phone
     },
     movie: {
       _id: movie._id,
@@ -128,7 +128,7 @@ router.post('/', [auth, admin, requestValidator(validate)], async (req, res) => 
          *       200:
          *         description: Get all rentals
          *         schema:
-         *           $ref: '#/definitions/Rental'
+         *           $ref: '#/definitions/rental'
 */
 router.get('/', async (req, res) => {
   const rentals = await Rental.find().sort('-dateOut');
@@ -153,7 +153,7 @@ router.get('/', async (req, res) => {
          *       200:
          *         description: Return specific rental details
          *         schema:
-         *           $ref: '#/definitions/Rental'
+         *           $ref: '#/definitions/rental'
          *       400:
          *         description: Bad request
          *       404:
@@ -188,7 +188,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
              *       200:
             *         description: Return deleted rental details
             *         schema:
-            *            $ref: '#/definitions/Rental'
+            *            $ref: '#/definitions/rental'
              *       400:
              *         description: Bad request
              *       404:
@@ -221,7 +221,7 @@ router.delete('/:id', [auth, validateObjectId], async (req, res) => {
          *         schema:
          *           type: object
          *           properties:
-         *             customerId: 
+         *             clientId: 
          *                type: string
          *             movieId: 
          *                type: string
@@ -229,7 +229,7 @@ router.delete('/:id', [auth, validateObjectId], async (req, res) => {
          *       200:
          *         description: Return record of returned rental
          *         schema:
-         *           $ref: '#/definitions/Rental'
+         *           $ref: '#/definitions/rental'
          *       400:
          *         description: Bad request
          *       403:
@@ -243,7 +243,7 @@ router.delete('/:id', [auth, validateObjectId], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   try {
-      const rental = await Rental.lookUpRental(req.body.customerId, req.body.movieId);
+      const rental = await Rental.lookUpRental(req.body.clientId, req.body.movieId);
 
     if (!rental) return res.status(404).send('rental not found');
     if(rental.dateReturned) return res.status(400).send('rental already processed');

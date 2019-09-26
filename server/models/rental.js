@@ -1,10 +1,10 @@
 import Joi from 'joi';
 import mongoose from 'mongoose';
-import { customerSchema } from './customer';
+import { clientSchema } from './client';
 
 const rentalSchema = new mongoose.Schema({
-  customer: {
-    type: customerSchema,
+  client: {
+    type: clientSchema,
     required: true
   },
   movie: {
@@ -39,9 +39,9 @@ const rentalSchema = new mongoose.Schema({
   }
 });
 
-rentalSchema.statics.lookUpRental = function (customerId, movieId) {
+rentalSchema.statics.lookUpRental = function (clientId, movieId) {
      return  this.findOne({
-        'customer._id': customerId, 
+        'client._id': clientId, 
         'movie._id': movieId
       });
 }
@@ -59,7 +59,7 @@ export const Rental = mongoose.model("Rental", rentalSchema);
 export const validate = rental => {
   const schema = {
     //to validate the obejct ids
-    customerId: Joi.objectId().required(),
+    clientId: Joi.objectId().required(),
     movieId: Joi.objectId().required()
   };
   return Joi.validate(rental, schema);

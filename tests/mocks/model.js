@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export const movieId = new mongoose.Types.ObjectId();
-export const customerId = new mongoose.Types.ObjectId();
+export const clientId = new mongoose.Types.ObjectId();
 
 export const models = {
     genres: [
@@ -12,8 +12,8 @@ export const models = {
         { name: 'Genre5'}
     ],
     rental: {
-        customer: { 
-            _id:customerId, 
+        client: { 
+            _id:clientId, 
             name: 'Ammie Patrick', 
             phone: '08022234567'
         },

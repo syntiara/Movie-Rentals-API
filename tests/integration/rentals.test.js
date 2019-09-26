@@ -3,7 +3,7 @@ import request from 'supertest';
 import { Rental } from '../../server/models/rental';
 import { Movie } from '../../server/models/movie';
 import { User } from '../../server/models/user';
-import { models, movieId, customerId } from '../mocks/model';
+import { models, movieId, clientId } from '../mocks/model';
 import app from '../../server/index';
 
 let server;
@@ -37,7 +37,7 @@ describe('/api/rentals', () =>{
 
         beforeEach(  () => {
             token = new User(models.userPayload).generateAuthToken();
-            body = {customerId, movieId};
+            body = {clientId, movieId};
         });
 
         it('should return 401 if client is not logged in', async () =>{
@@ -52,8 +52,8 @@ describe('/api/rentals', () =>{
             expect(res.status).toBe(403);
         });
 
-        it('should return 400 if customerId is not provided', async () =>{
-            body.customerId = '';
+        it('should return 400 if clientId is not provided', async () =>{
+            body.clientId = '';
             const res = await exec();
             expect(res.status).toBe(400);
         });
@@ -65,7 +65,7 @@ describe('/api/rentals', () =>{
         });
         
 
-        it('should return 404 if no rental is found for customer/movie id', async () =>{
+        it('should return 404 if no rental is found for client/movie id', async () =>{
             await Rental.remove({});
             const res = await exec();
             expect(res.status).toBe(404);
@@ -82,7 +82,7 @@ describe('/api/rentals', () =>{
         it('should return 200 for valid and unprocessed request', async () =>{
             const res = await exec();
             expect(res.status).toBe(200);
-            expect(res.body).toHaveProperty('customer');
+            expect(res.body).toHaveProperty('client');
             expect(res.body).toHaveProperty('movie');
         });
 
@@ -99,7 +99,7 @@ describe('/api/rentals', () =>{
             const res = await exec();  
             expect(res.status).toBe(200);
             expect(Object.keys(res.body)).
-            toEqual(expect.arrayContaining(['rentalFee', 'customer', 'movie']));
+            toEqual(expect.arrayContaining(['rentalFee', 'client', 'movie']));
  
           });
         
@@ -114,7 +114,7 @@ describe('/api/rentals', () =>{
             const res = await exec();
             //another way of looking for properties
             expect(Object.keys(res.body)).
-            toEqual(expect.arrayContaining(['dateOut', 'dateReturned', 'customer', 'movie']));
+            toEqual(expect.arrayContaining(['dateOut', 'dateReturned', 'client', 'movie']));
 
 
         }); 

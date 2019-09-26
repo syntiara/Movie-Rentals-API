@@ -35,8 +35,13 @@ describe('/api/genres', () =>{
         expect(res.body).toHaveProperty('name', genre.ops[0].name);
     });
 
-    it('should return error message if the id does not exist', async () =>{
+    it('should return error message if an invalid id was sent', async () =>{
         const res = await request(server).get(`/api/genres/5`);
+        expect(res.status).toBe(400);
+    });
+
+    it('should return error message if the id does not exist', async () =>{
+        const res = await request(server).get(`/api/genres/5d8704a8b63b7d806c072e6d`);
         expect(res.status).toBe(404);
         // expect(res.statusText).toBe('The genre with the given id was not found.');
     });

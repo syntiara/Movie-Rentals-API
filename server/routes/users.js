@@ -130,7 +130,11 @@ router.get('/me', auth, async (req, res) => {
 	     *         description: user's name
 	     *         in: body
 	     *         required: true
-         *         type: string
+         *         schema:
+         *           type: object
+         *           properties:
+         *              name: 
+         *                type: string
              *      
              *     responses:
              *       200:
