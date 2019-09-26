@@ -14,7 +14,7 @@ This is a backend application that exposes routes for a movie rental business
 - [Support or Contribution](#support-or-contribution)
 
 ## Getting Started
-This is a server-side javascript application built with [Express JS](https://expressjs.com/) application. The database is [MongoDB](https://www.mongodb.com/)
+This is a server-side javascript application built with [Express JS](https://expressjs.com/). The database is [MongoDB](https://www.mongodb.com/)
 
 
 ## Technology Stack
