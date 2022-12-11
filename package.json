@@ -36,7 +36,7 @@
     "dotenv": "^8.1.0",
     "eslint": "^6.4.0",
     "eslint-plugin-import": "^2.18.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fawn": "^2.1.5",
     "helmet": "^3.21.0",
     "joi": "^14.3.1",
